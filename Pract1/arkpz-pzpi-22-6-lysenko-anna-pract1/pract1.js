@@ -107,7 +107,7 @@ if (validateDimensions(rectangleWidth, rectangleHeight)) {
 testRectangle();
 
 /*
-// Гарний приклад використання відступів та вирівнювання 
+// Гарний приклад використання відступів, вирівнювання, фігурних дужок 
 function validateDimensions(width, height) {
   return width > 0 && height > 0;
 }
@@ -116,7 +116,7 @@ function calculatePerimeter(width, height) {
   return 2 * (width + height);
 }
 
-// Поганий приклад використання відступів, відсунтніть вирівнювання
+// Поганий приклад використання відступів, фігурних дужок, відсутність вирівнювання
 function calculateArea(width, height){
   return width*height;
   }function calculatePerimeter(width,height){return 2*(width+height);}
