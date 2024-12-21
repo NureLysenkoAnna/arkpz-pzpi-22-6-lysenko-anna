@@ -78,11 +78,19 @@ namespace GasDec.Controllers
         [SwaggerOperation(Summary = "Отримати всі події з обраною важливістю.")]
         public async Task<ActionResult<IEnumerable<Event>>> GetEventsBySeverity(string severity)
         {
-            var events = await _eventService.GetEventsBySeverityAsync(severity);
+            if (!Enum.TryParse(severity, true, out SeverityLevel severityLevel))
+            {
+                return BadRequest($"Невірне значення важливості: '{severity}'." +
+                    $" Доступні значення: Low, Medium, High.");
+            }
+
+            var events = await _eventService.GetEventsBySeverityAsync(severityLevel);
+            
             if (events == null || events.Count == 0)
             {
                 return NotFound($"Події з важливістю '{severity}' не знайдено");
             }
+            
             return Ok(events);
         }
     }

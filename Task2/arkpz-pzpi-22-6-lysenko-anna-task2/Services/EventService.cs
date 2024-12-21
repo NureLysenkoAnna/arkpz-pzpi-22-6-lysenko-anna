@@ -61,12 +61,12 @@ namespace GasDec.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Event>> GetEventsBySeverityAsync(string severity)
+        public async Task<List<Event>> GetEventsBySeverityAsync(SeverityLevel severity)
         {
             return await _context.Events
-                                 .Where(e => e.severity == severity)
-                                 .Include(e => e.SensorData)
-                                 .ToListAsync();
+                        .Where(e => e.severity == severity)
+                        .Include(e => e.SensorData)
+                        .ToListAsync();
         }
     }
 }

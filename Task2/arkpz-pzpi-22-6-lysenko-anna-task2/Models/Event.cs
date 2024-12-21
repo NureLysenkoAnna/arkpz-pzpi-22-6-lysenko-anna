@@ -9,6 +9,13 @@ using System.Text.Json.Serialization;
 
 namespace GasDec.Models
 {
+    public enum SeverityLevel
+    {
+        Low = 1,    
+        Medium = 2,
+        High = 3
+    }
+
     public class Event
     {
         [Key]
@@ -18,8 +25,7 @@ namespace GasDec.Models
         public DateTime event_time { get; set; }
 
         [Required]
-        [MaxLength(20)]
-        public string severity { get; set; }
+        public SeverityLevel severity { get; set; }
 
         public int data_id { get; set; }
 
