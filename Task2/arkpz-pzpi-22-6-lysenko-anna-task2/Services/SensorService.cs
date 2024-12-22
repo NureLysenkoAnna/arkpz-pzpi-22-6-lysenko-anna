@@ -64,9 +64,9 @@ namespace GasDec.Services
 
         public async Task<List<Sensor>> GetSensorsByStatusAsync(string status)
         {
+            string normalizedStatus = status.ToLower();
             return await _context.Sensors
-                                 .Where(s => s.status.Equals(status, 
-                                 System.StringComparison.OrdinalIgnoreCase))
+                                 .Where(s => s.status.ToLower() == normalizedStatus)
                                  .Include(s => s.Location)
                                  .ToListAsync();
         }

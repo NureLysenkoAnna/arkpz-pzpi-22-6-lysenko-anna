@@ -26,6 +26,6 @@ namespace GasDec.Models
 
         [ForeignKey("sensor_id")]
         [JsonIgnore]
-        public Sensor Sensor { get; set; }
+        public Sensor? Sensor { get; set; }
     }
 }

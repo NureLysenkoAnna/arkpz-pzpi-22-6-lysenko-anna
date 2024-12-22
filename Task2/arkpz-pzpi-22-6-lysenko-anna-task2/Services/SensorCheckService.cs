@@ -71,8 +71,9 @@ namespace GasDec.Services
 
         public async Task<List<SensorCheck>> GetSensorChecksByResultAsync(string result)
         {
+            string normalizedResult = result.ToLower();
             return await _context.SensorChecks
-                                 .Where(sc => sc.result.Equals(result, System.StringComparison.OrdinalIgnoreCase))
+                                 .Where(sc => sc.result.ToLower() == normalizedResult)
                                  .Include(sc => sc.Sensor)
                                  .ToListAsync();
         }
