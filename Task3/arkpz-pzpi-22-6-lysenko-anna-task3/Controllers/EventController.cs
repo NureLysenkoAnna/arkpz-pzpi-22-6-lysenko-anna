@@ -17,6 +17,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі події.")]
         public async Task<ActionResult<IEnumerable<Event>>> GetAllEvents()
         {
@@ -25,6 +26,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати певну подію.")]
         public async Task<ActionResult<Event>> GetEventById(int id)
         {
@@ -37,6 +39,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Створити нову подію.")]
         public async Task<ActionResult<Event>> CreateEvent([FromBody] Event newEvent)
         {
@@ -45,6 +48,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Оновити обрану подію.")]
         public async Task<IActionResult> UpdateEvent(int id, [FromBody] Event updatedEvent)
         {
@@ -60,6 +64,7 @@ namespace GasDec.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Видалити обрану подію.")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
@@ -75,6 +80,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("severity/{severity}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі події з обраною важливістю.")]
         public async Task<ActionResult<IEnumerable<Event>>> GetEventsBySeverity(string severity)
         {

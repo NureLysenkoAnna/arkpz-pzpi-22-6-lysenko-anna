@@ -17,6 +17,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(Summary = "Отримати всі сенсори.")]
         public async Task<ActionResult<IEnumerable<Sensor>>> GetAllSensors()
         {
@@ -25,6 +26,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Отримати певний сенсор.")]
         public async Task<ActionResult<Sensor>> GetSensorById(int id)
         {
@@ -37,6 +39,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Додати новий сенсор.")]
         public async Task<ActionResult<Sensor>> CreateSensor([FromBody] Sensor sensor)
         {
@@ -46,6 +49,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Оновити обраний сенсор.")]
         public async Task<IActionResult> UpdateSensor(int id, [FromBody] Sensor updatedSensor)
         {
@@ -61,6 +65,7 @@ namespace GasDec.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Видалити обраний сенсор.")]
         public async Task<IActionResult> DeleteSensor(int id)
         {
@@ -76,6 +81,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("status/{status}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати сенсори з обраним статусом.")]
         public async Task<ActionResult<IEnumerable<Sensor>>> GetSensorsByStatus(string status)
         {
@@ -90,6 +96,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("location/{locationId}")]
+        [Authorize(Roles = "Admin, Manager")]
         [SwaggerOperation(Summary = "Отримати сенсори на вказаній локації.")]
         public async Task<ActionResult<IEnumerable<Sensor>>> GetSensorsByLocation(int locationId)
         {

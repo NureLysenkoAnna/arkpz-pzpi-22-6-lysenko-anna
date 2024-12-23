@@ -17,6 +17,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(Summary = "Отримати всі локації.")]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
         {
@@ -25,6 +26,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Знайти локацію за id.")]
         public async Task<ActionResult<Location>> GetLocationById(int id)
         {
@@ -37,6 +39,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Створити нову локацію.")]
         public async Task<IActionResult> AddLocation([FromBody] Location location)
         {
@@ -52,6 +55,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Оновити обрану локацію.")]
         public async Task<IActionResult> UpdateLocation(int id, [FromBody] Location updatedLocation)
         {
@@ -67,6 +71,7 @@ namespace GasDec.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Видалити обрану локацію.")]
         public async Task<IActionResult> DeleteLocation(int id)
         {
@@ -82,6 +87,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("floor/{floor}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Отримати локації за обраним поверхом.")]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocationsByFloor(int floor)
         {
@@ -96,6 +102,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("type/{type}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати локації за обраним типом.")]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocationsByType(string type)
         {

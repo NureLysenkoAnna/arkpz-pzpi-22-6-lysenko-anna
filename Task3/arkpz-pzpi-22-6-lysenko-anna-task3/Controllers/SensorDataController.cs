@@ -17,6 +17,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі дані з сенсорів.")]
         public async Task<ActionResult<IEnumerable<SensorData>>> GetAllSensorData()
         {
@@ -25,6 +26,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати певні дані.")]
         public async Task<ActionResult<SensorData>> GetSensorDataById(int id)
         {
@@ -37,6 +39,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Створити нові дані.")]
         public async Task<ActionResult<SensorData>> CreateSensorData([FromBody] SensorData sensorData)
         {
@@ -45,6 +48,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Оновити дані з сенсора.")]
         public async Task<IActionResult> UpdateSensorData(int id, [FromBody] SensorData updatedSensorData)
         {
@@ -60,6 +64,7 @@ namespace GasDec.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Видалити дані, отримані з сенора.")]
         public async Task<IActionResult> DeleteSensorData(int id)
         {

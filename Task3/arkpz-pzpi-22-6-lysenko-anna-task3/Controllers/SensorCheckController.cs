@@ -17,6 +17,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі перевірки.")]
         public async Task<ActionResult<IEnumerable<SensorCheck>>> GetAllSensorChecks()
         {
@@ -25,6 +26,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати певну перевірку.")]
         public async Task<ActionResult<SensorCheck>> GetSensorCheckById(int id)
         {
@@ -37,6 +39,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Додати нову перевірку.")]
         public async Task<ActionResult<SensorCheck>> CreateSensorCheck([FromBody] SensorCheck sensorCheck)
         {
@@ -46,6 +49,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Оновити інформацію про перевірку сенсора.")]
         public async Task<IActionResult> UpdateSensorCheck(int id, [FromBody] SensorCheck updatedSensorCheck)
         {
@@ -61,6 +65,7 @@ namespace GasDec.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin")]
         [SwaggerOperation(Summary = "Видалити інформацію про перевірку сенсора.")]
         public async Task<IActionResult> DeleteSensorCheck(int id)
         {
@@ -76,6 +81,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("date/{date}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі перевірки за обраною датою.")]
         public async Task<ActionResult<IEnumerable<SensorCheck>>> GetSensorChecksByDate(string date)
         {
@@ -95,6 +101,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("result/{result}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі перевірки з обраним результатом.")]
         public async Task<ActionResult<IEnumerable<SensorCheck>>> GetSensorChecksByResult(string result)
         {
@@ -109,6 +116,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("sensor/{sensorId}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі перевірки для обраного сенсора.")]
         public async Task<ActionResult<IEnumerable<SensorCheck>>> GetSensorChecksBySensorId(int sensorId)
         {

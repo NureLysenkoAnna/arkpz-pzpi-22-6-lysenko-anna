@@ -17,6 +17,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [SwaggerOperation(Summary = "Отримати всі сповіщення.")]
         public async Task<ActionResult<IEnumerable<Notification>>> GetAllNotifications()
         {
@@ -25,6 +26,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Отримати певне сповіщення.")]
         public async Task<ActionResult<Notification>> GetNotificationById(int id)
         {
@@ -37,6 +39,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Створити нове сповіщення.")]
         public async Task<ActionResult<Notification>> CreateNotification([FromBody] Notification newNotification)
         {
@@ -46,6 +49,7 @@ namespace GasDec.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Оновити обране сповіщення.")]
         public async Task<IActionResult> UpdateNotification(int id, [FromBody] Notification updatedNotification)
         {
@@ -61,6 +65,7 @@ namespace GasDec.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Видалити обране сповіщення.")]
         public async Task<IActionResult> DeleteNotification(int id)
         {
@@ -76,6 +81,7 @@ namespace GasDec.Controllers
         }
 
         [HttpGet("type/{type}")]
+        [Authorize(Roles = "Admin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі сповіщення за вказаним типом.")]
         public async Task<ActionResult<IEnumerable<Notification>>> GetNotificationsByType(string type)
         {

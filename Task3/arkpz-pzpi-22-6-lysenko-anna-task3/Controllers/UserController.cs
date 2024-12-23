@@ -15,6 +15,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin, Manager")]
     [SwaggerOperation(Summary = "Отримати список всіх користувачів.")]
     public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
@@ -45,6 +46,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin, Manager")]
     [SwaggerOperation(Summary = "Створити нового користувача.")]
     public async Task<ActionResult<User>> CreateUser([FromBody] User user)
     {
@@ -60,6 +62,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin, Manager")]
     [SwaggerOperation(Summary = "Оновити обраного користувача.")]
     public async Task<IActionResult> UpdateUser(int id, [FromBody] User user)
     {
@@ -75,6 +78,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin, Manager")]
     [SwaggerOperation(Summary = "Видалити обраного користувача.")]
     public async Task<IActionResult> DeleteUser(int id)
     {
@@ -90,6 +94,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("location/{locationId}")]
+    [Authorize(Roles = "Admin, Manager")]
     [SwaggerOperation(Summary = "Отримати користувачів за обраною локацією.")]
     public async Task<ActionResult<IEnumerable<User>>> GetUsersByLocation(int locationId)
     {
