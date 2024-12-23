@@ -89,6 +89,11 @@ public class UserController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Отримати користувачів за обраною локацією.
+    /// </summary>
+    /// <param name="locationId">ID локації для фільтрації користувачів.</param>
+    /// <returns>Список користувачів для заданої локації або NotFound, якщо користувачі для цієї локації не знайдені.</returns>
     [HttpGet("location/{locationId}")]
     [SwaggerOperation(Summary = "Отримати користувачів за обраною локацією.")]
     public async Task<ActionResult<IEnumerable<User>>> GetUsersByLocation(int locationId)

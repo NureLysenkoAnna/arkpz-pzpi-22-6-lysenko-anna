@@ -75,6 +75,11 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Отримати всі сповіщення за вказаним типом.
+        /// </summary>
+        /// <param name="type">Тип сповіщення для фільтрації.</param>
+        /// <returns>Список сповіщень за вказаним типом, або NotFound, якщо сповіщення не знайдені.</returns>
         [HttpGet("type/{type}")]
         [SwaggerOperation(Summary = "Отримати всі сповіщення за вказаним типом.")]
         public async Task<ActionResult<IEnumerable<Notification>>> GetNotificationsByType(string type)

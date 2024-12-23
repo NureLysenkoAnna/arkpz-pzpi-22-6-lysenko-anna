@@ -59,6 +59,11 @@ namespace GasDec.Services
 
         }
 
+        /// <summary>
+        /// Отримує всі локації за вказаним поверхом.
+        /// </summary>
+        /// <param name="floor">Номер поверху для фільтрації локацій.</param>
+        /// <returns>Список локацій на вказаному поверсі.</returns>
         public async Task<List<Location>> GetLocationsByFloorAsync(int floor)
         {
             return await _context.Locations
@@ -66,6 +71,11 @@ namespace GasDec.Services
                                  .ToListAsync();
         }
 
+        /// <summary>
+        /// Отримує всі локації за вказаним типом.
+        /// </summary>
+        /// <param name="type">Тип локації для фільтрації (регістр не має значення).</param>
+        /// <returns>Список локацій з вказаним типом.</returns>
         public async Task<List<Location>> GetLocationsByTypeAsync(string type)
         {
             return await _context.Locations

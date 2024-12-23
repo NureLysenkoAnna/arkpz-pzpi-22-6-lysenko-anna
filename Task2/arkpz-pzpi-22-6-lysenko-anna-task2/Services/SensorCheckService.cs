@@ -61,6 +61,11 @@ namespace GasDec.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Отримує всі перевірки сенсорів за вказаною датою.
+        /// </summary>
+        /// <param name="date">Дата перевірки для фільтрації.</param>
+        /// <returns>Список перевірок, що відповідають вказаній даті.</returns>
         public async Task<List<SensorCheck>> GetSensorChecksByDateAsync(DateTime date)
         {
             return await _context.SensorChecks
@@ -69,6 +74,11 @@ namespace GasDec.Services
                                  .ToListAsync();
         }
 
+        /// <summary>
+        /// Отримує всі перевірки сенсорів за вказаним результатом перевірки.
+        /// </summary>
+        /// <param name="result">Результат перевірки для фільтрації.</param>
+        /// <returns>Список перевірок, що відповідають вказаному результату.</returns>
         public async Task<List<SensorCheck>> GetSensorChecksByResultAsync(string result)
         {
             string normalizedResult = result.ToLower();
@@ -78,6 +88,11 @@ namespace GasDec.Services
                                  .ToListAsync();
         }
 
+        /// <summary>
+        /// Отримує всі перевірки для конкретного сенсора за його ID.
+        /// </summary>
+        /// <param name="sensorId">ID сенсора для фільтрації перевірок.</param>
+        /// <returns>Список перевірок для вказаного сенсора.</returns>
         public async Task<List<SensorCheck>> GetSensorChecksBySensorIdAsync(int sensorId)
         {
             return await _context.SensorChecks

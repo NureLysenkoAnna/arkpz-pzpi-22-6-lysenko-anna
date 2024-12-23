@@ -64,6 +64,11 @@ namespace GasDec.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Отримання списку користувачів за ідентифікатором локації.
+        /// </summary>
+        /// <param name="locationId">Ідентифікатор локації.</param>
+        /// <returns>Список користувачів, які належать до зазначеної локації.</returns>
         public async Task<List<User>> GetUsersByLocationAsync(int locationId)
         {
             return await _context.Users

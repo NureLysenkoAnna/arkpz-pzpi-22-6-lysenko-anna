@@ -16,6 +16,10 @@ namespace GasDec.Controllers
             _locationService = locationService;
         }
 
+        /// <summary>
+        /// Отримати всі локації.
+        /// </summary>
+        /// <returns>Список всіх локацій.</returns>
         [HttpGet]
         [SwaggerOperation(Summary = "Отримати всі локації.")]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
@@ -24,6 +28,11 @@ namespace GasDec.Controllers
             return Ok(locations);
         }
 
+        /// <summary>
+        /// Знайти локацію за ID.
+        /// </summary>
+        /// <param name="id">ID локації для пошуку.</param>
+        /// <returns>Локація з відповідним ID, або NotFound якщо локація не знайдена.</returns>
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Знайти локацію за id.")]
         public async Task<ActionResult<Location>> GetLocationById(int id)
@@ -36,6 +45,11 @@ namespace GasDec.Controllers
             return Ok(location);
         }
 
+        /// <summary>
+        /// Створити нову локацію.
+        /// </summary>
+        /// <param name="location">Дані нової локації.</param>
+        /// <returns>CreatedAtAction з новоствореною локацією.</returns>
         [HttpPost]
         [SwaggerOperation(Summary = "Створити нову локацію.")]
         public async Task<IActionResult> AddLocation([FromBody] Location location)
@@ -51,6 +65,12 @@ namespace GasDec.Controllers
             return CreatedAtAction(nameof(GetLocationById), new { id = addedLocation.location_id }, addedLocation);
         }
 
+        /// <summary>
+        /// Оновити обрану локацію.
+        /// </summary>
+        /// <param name="id">ID локації, яку потрібно оновити.</param>
+        /// <param name="updatedLocation">Оновлені дані локації.</param>
+        /// <returns>Ok з повідомленням про успішне оновлення або NotFound якщо локація не знайдена.</returns>
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Оновити обрану локацію.")]
         public async Task<IActionResult> UpdateLocation(int id, [FromBody] Location updatedLocation)
@@ -66,6 +86,11 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Видалити обрану локацію.
+        /// </summary>
+        /// <param name="id">ID локації, яку потрібно видалити.</param>
+        /// <returns>Ok з повідомленням про успішне видалення або NotFound якщо локація не знайдена.</returns>
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Видалити обрану локацію.")]
         public async Task<IActionResult> DeleteLocation(int id)
@@ -81,6 +106,11 @@ namespace GasDec.Controllers
             }
         }
 
+        // <summary>
+        /// Отримати локації за обраним поверхом.
+        /// </summary>
+        /// <param name="floor">Номер поверху для пошуку локацій.</param>
+        /// <returns>Список локацій на зазначеному поверсі або NotFound, якщо такі локації відсутні.</returns>
         [HttpGet("floor/{floor}")]
         [SwaggerOperation(Summary = "Отримати локації за обраним поверхом.")]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocationsByFloor(int floor)
@@ -95,6 +125,11 @@ namespace GasDec.Controllers
             return Ok(locations);
         }
 
+        /// <summary>
+        /// Отримати локації за обраним типом.
+        /// </summary>
+        /// <param name="type">Тип локації для пошуку.</param>
+        /// <returns>Список локацій з відповідним типом або NotFound, якщо такі локації відсутні.</returns>
         [HttpGet("type/{type}")]
         [SwaggerOperation(Summary = "Отримати локації за обраним типом.")]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocationsByType(string type)

@@ -75,6 +75,11 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Отримати сенсори з обраним статусом.
+        /// </summary>
+        /// <param name="status">Статус сенсорів для фільтрації (наприклад, 'Active', 'Inactive').</param>
+        /// <returns>Список сенсорів з відповідним статусом або NotFound, якщо сенсори з таким статусом не знайдені.</returns>
         [HttpGet("status/{status}")]
         [SwaggerOperation(Summary = "Отримати сенсори з обраним статусом.")]
         public async Task<ActionResult<IEnumerable<Sensor>>> GetSensorsByStatus(string status)
@@ -89,6 +94,11 @@ namespace GasDec.Controllers
             return Ok(sensors);
         }
 
+        /// <summary>
+        /// Отримати сенсори на вказаній локації.
+        /// </summary>
+        /// <param name="locationId">ID локації для фільтрації сенсорів.</param>
+        /// <returns>Список сенсорів на вказаній локації або NotFound, якщо сенсори в цій локації не знайдені.</returns>
         [HttpGet("location/{locationId}")]
         [SwaggerOperation(Summary = "Отримати сенсори на вказаній локації.")]
         public async Task<ActionResult<IEnumerable<Sensor>>> GetSensorsByLocation(int locationId)

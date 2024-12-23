@@ -61,6 +61,11 @@ namespace GasDec.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Отримується список подій за рівнем серйозності.
+        /// </summary>
+        /// <param name="severity">Рівень серйозності для фільтрації подій.</param>
+        /// <returns>Список подій з вказаним рівнем серйозності, включаючи дані сенсорів.</returns>
         public async Task<List<Event>> GetEventsBySeverityAsync(SeverityLevel severity)
         {
             return await _context.Events

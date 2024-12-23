@@ -75,6 +75,12 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Отримати всі перевірки за обраною датою.
+        /// </summary>
+        /// <param name="date">Дата, за яку потрібно отримати перевірки у форматі 'yyyy-MM-dd'.</param>
+        /// <returns>Список перевірок для обраної дати.</returns>
+        /// <returns>BadRequest, якщо формат дати некоректний, або NotFound, якщо перевірки не знайдені.</returns>
         [HttpGet("date/{date}")]
         [SwaggerOperation(Summary = "Отримати всі перевірки за обраною датою.")]
         public async Task<ActionResult<IEnumerable<SensorCheck>>> GetSensorChecksByDate(string date)
@@ -94,6 +100,12 @@ namespace GasDec.Controllers
             return Ok(sensorChecks);
         }
 
+        /// <summary>
+        /// Отримати всі перевірки з обраним результатом.
+        /// </summary>
+        /// <param name="result">Результат перевірки (наприклад, 'Pass' або 'Fail').</param>
+        /// <returns>Список перевірок з відповідним результатом.</returns>
+        /// <returns>NotFound, якщо перевірки з таким результатом не знайдені.</returns>
         [HttpGet("result/{result}")]
         [SwaggerOperation(Summary = "Отримати всі перевірки з обраним результатом.")]
         public async Task<ActionResult<IEnumerable<SensorCheck>>> GetSensorChecksByResult(string result)
@@ -108,6 +120,11 @@ namespace GasDec.Controllers
             return Ok(sensorChecks);
         }
 
+        /// <summary>
+        /// Отримати всі перевірки для обраного сенсора.
+        /// </summary>
+        /// <param name="sensorId">ID сенсора для пошуку перевірок.</param>
+        /// <returns>Список перевірок для сенсора з відповідним ID або NotFound, якщо перевірки не знайдені.</returns>
         [HttpGet("sensor/{sensorId}")]
         [SwaggerOperation(Summary = "Отримати всі перевірки для обраного сенсора.")]
         public async Task<ActionResult<IEnumerable<SensorCheck>>> GetSensorChecksBySensorId(int sensorId)

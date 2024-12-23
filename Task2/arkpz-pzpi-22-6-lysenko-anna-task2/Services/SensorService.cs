@@ -62,6 +62,11 @@ namespace GasDec.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Отримує сенсори за вказаним статусом.
+        /// </summary>
+        /// <param name="status">Статус сенсора, за яким потрібно фільтрувати.</param>
+        /// <returns>Список сенсорів, що відповідають заданому статусу.</returns>
         public async Task<List<Sensor>> GetSensorsByStatusAsync(string status)
         {
             string normalizedStatus = status.ToLower();
@@ -71,6 +76,11 @@ namespace GasDec.Services
                                  .ToListAsync();
         }
 
+        /// <summary>
+        /// Отримує сенсори для вказаної локації.
+        /// </summary>
+        /// <param name="locationId">ID локації, для якої потрібно отримати сенсори.</param>
+        /// <returns>Список сенсорів, які знаходяться на вказаній локації.</returns>
         public async Task<List<Sensor>> GetSensorsByLocationAsync(int locationId)
         {
             return await _context.Sensors
