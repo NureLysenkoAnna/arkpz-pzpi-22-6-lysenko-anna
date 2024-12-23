@@ -177,14 +177,104 @@ GET         api/notifications/type/{type}       Отримати всі спов
      
 4. Тестування розроблених функцій серверної частини.
 Swagger UI було налаштовано у проєкті та використано для тестування розроблених функцій серверної частини. Swagger автоматично генерує інтерфейс для тестування API.
-5. Посилання на відеозапис з тестуванням функціональності серверної частини (YouTube):
+5. Навести фрагменти програмного коду з логікою взаємодії серверної частини з БД.
+Приклад коду, що наведено у додатку Б, демонструє реалізацію моделі даних у серверній частині, яка використовується для взаємодії з базою даних через ORM Entity Framework. Клас Location є відображенням таблиці в базі даних. У класі визначено поля (location_id, name, location_type, floor, area) та атрибути ([Key], [Required], [MaxLength]) для визначення правил зберігання даних, таких як первинні ключі, обов’язкові поля, обмеження на довжину тексту та інше. У моделі визначено зв'язки між таблицями за допомогою навігаційних властивостей.
+Також у додатку Б наведено приклади реалізації деяких CRUD-операцій (створення, читання, оновлення) за допомогою ORM Entity Framework.
+6. Навести фрагменти програмного коду з логікою взаємодії серверної частини з клієнтами.
+У додатку В наведено фрагменти коду, що обробляють запити клієнтів через HTTP API, викликаючи відповідні методи сервісного шару для роботи з базою даних. 
+7. Посилання на відеозапис з тестуванням функціональності серверної частини (YouTube):
 https://youtu.be/x124vrhQrtI 
-6. Посилання на репозиторій проєкту (GitHub):
+8. Посилання на репозиторій проєкту (GitHub):
 https://github.com/NureLysenkoAnna/arkpz-pzpi-22-6-lysenko-anna/tree/main/Task2
-7. Висновки:
+9. Висновки:
 У результаті виконання лабораторної роботи було створено базу даних для серверної частини  програмної системи та прикладного програмного інтерфейсу (API).
      
 ДОДАТОК А
 UML діаграма прецедентів для серверної частини системи  
 
 Рисунок А.1 - UML діаграма прецедентів
+
+ДОДАТОК Б
+Фрагменти програмного коду з логікою взаємодії серверної частини з БД
+
+1	public class Location
+2	{
+3	    [Key]
+4	    public int location_id { get; set; }
+5	
+6	    [Required]
+7	    [MaxLength(100)]
+8	    public string name { get; set; }
+9	
+10	    [Required]
+11	    [MaxLength(50)]
+12	    public string location_type { get; set; }
+13	
+14	    [Required]
+15	    public int floor { get; set; }
+16	
+17	    public double? area { get; set; } 
+18	
+19	    [JsonIgnore]
+20	    public ICollection<User>? Users { get; set; }
+21	
+22	    [JsonIgnore]
+23	    public ICollection<Sensor>? Sensors { get; set; }
+24	}
+25
+26
+27
+28	public async Task<List<Location>> GetAllLocationsAsync()
+29	{
+30	    return await _context.Locations.ToListAsync();
+31	}
+32	
+33	public async Task<Location> GetLocationByIdAsync(int locationId)
+34	{
+35	    return await _context.Locations.FindAsync(locationId);
+36	}
+37	
+38	public async Task<Location> AddLocationAsync(Location location)
+39	{
+40	    _context.Locations.Add(location);
+41	    await _context.SaveChangesAsync();
+42	    return location;
+43	}
+
+ДОДАТОК В
+Фрагменти програмного коду з логікою взаємодії серверної частини з клієнтами
+
+1	[HttpGet]
+2	[SwaggerOperation(Summary = "Отримати всі локації.")]
+3	public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
+4	{
+5	    var locations = await _locationService.GetAllLocationsAsync();
+6	    return Ok(locations);
+7	}
+8
+9	[HttpGet("{id}")]
+10	[SwaggerOperation(Summary = "Знайти локацію за id.")]
+11	public async Task<ActionResult<Location>> GetLocationById(int id)
+12	{
+13	    var location = await _locationService.GetLocationByIdAsync(id);
+14	    if (location == null)
+15	    {
+16	        return NotFound($"Локація з ID {id} не знайдена");
+17	    }
+18	    return Ok(location);
+19	}
+20
+21	[HttpPost]
+22	[SwaggerOperation(Summary = "Створити нову локацію.")]
+23	public async Task<IActionResult> AddLocation([FromBody] Location location)
+24	{
+25	    if (location == null)
+26	    {
+27	        return BadRequest("Invalid location data.");
+28	    }
+29
+30	    location.location_id = 0;
+31
+32	    var addedLocation = await _locationService.AddLocationAsync(location);
+33	    return CreatedAtAction(nameof(GetLocationById), new { id = addedLocation.location_id }, addedLocation);
+34	}
