@@ -80,6 +80,11 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Отримати сенсори з обраним статусом.
+        /// </summary>
+        /// <param name="status">Статус сенсорів для фільтрації (наприклад, 'Active', 'Inactive').</param>
+        /// <returns>Список сенсорів з відповідним статусом або NotFound, якщо сенсори з таким статусом не знайдені.</returns>
         [HttpGet("status/{status}")]
         [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати сенсори з обраним статусом.")]
@@ -95,6 +100,11 @@ namespace GasDec.Controllers
             return Ok(sensors);
         }
 
+        /// <summary>
+        /// Отримати сенсори на вказаній локації.
+        /// </summary>
+        /// <param name="locationId">ID локації для фільтрації сенсорів.</param>
+        /// <returns>Список сенсорів на вказаній локації або NotFound, якщо сенсори в цій локації не знайдені.</returns>
         [HttpGet("location/{locationId}")]
         [Authorize(Roles = "Admin, Manager")]
         [SwaggerOperation(Summary = "Отримати сенсори на вказаній локації.")]
@@ -109,5 +119,20 @@ namespace GasDec.Controllers
 
             return Ok(sensors);
         }
+
+        /// <summary>
+        /// Перевірка потреби оновлень сенсорів.
+        /// </summary>
+        /// <param name="sensorId">ID сенсора, для якого перевіряється стан.</param>
+        /// <param name="recommendedLifetime">Рекомендований термін служби сенсора для перевірки необхідності оновлення.</param>
+        /// <returns>Статус потреби оновлення сенсора.</returns>
+        [HttpGet("outdated_check/{sensorId}")]
+        [Authorize(Roles = "LogicAdmin")]
+        [SwaggerOperation(Summary = "Перевірка потреби оновлень сенсорів.")]
+        public async Task<IActionResult> GetSensorStatus(int sensorId, [FromQuery] int recommendedLifetime)
+        {
+            var status = await _sensorService.CalculateSensorLifespanAndCheck(sensorId, recommendedLifetime);
+            return Ok(status);
+        }       
     }
 }

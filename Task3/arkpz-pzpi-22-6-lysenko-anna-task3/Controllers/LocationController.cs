@@ -16,6 +16,10 @@ namespace GasDec.Controllers
             _locationService = locationService;
         }
 
+        /// <summary>
+        /// Отримати всі локації.
+        /// </summary>
+        /// <returns>Список всіх локацій.</returns>
         [HttpGet]
         [Authorize]
         [SwaggerOperation(Summary = "Отримати всі локації.")]
@@ -25,6 +29,11 @@ namespace GasDec.Controllers
             return Ok(locations);
         }
 
+        /// <summary>
+        /// Знайти локацію за ID.
+        /// </summary>
+        /// <param name="id">ID локації для пошуку.</param>
+        /// <returns>Локація з відповідним ID, або NotFound якщо локація не знайдена.</returns>
         [HttpGet("{id}")]
         [Authorize]
         [SwaggerOperation(Summary = "Знайти локацію за id.")]
@@ -38,6 +47,11 @@ namespace GasDec.Controllers
             return Ok(location);
         }
 
+        /// <summary>
+        /// Створити нову локацію.
+        /// </summary>
+        /// <param name="location">Дані нової локації.</param>
+        /// <returns>CreatedAtAction з новоствореною локацією.</returns>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Створити нову локацію.")]
@@ -54,6 +68,12 @@ namespace GasDec.Controllers
             return CreatedAtAction(nameof(GetLocationById), new { id = addedLocation.location_id }, addedLocation);
         }
 
+        /// <summary>
+        /// Оновити обрану локацію.
+        /// </summary>
+        /// <param name="id">ID локації, яку потрібно оновити.</param>
+        /// <param name="updatedLocation">Оновлені дані локації.</param>
+        /// <returns>Ok з повідомленням про успішне оновлення або NotFound якщо локація не знайдена.</returns>
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Оновити обрану локацію.")]
@@ -70,6 +90,11 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Видалити обрану локацію.
+        /// </summary>
+        /// <param name="id">ID локації, яку потрібно видалити.</param>
+        /// <returns>Ok з повідомленням про успішне видалення або NotFound якщо локація не знайдена.</returns>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [SwaggerOperation(Summary = "Видалити обрану локацію.")]
@@ -86,6 +111,11 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Отримати локації за обраним поверхом.
+        /// </summary>
+        /// <param name="floor">Номер поверху для пошуку локацій.</param>
+        /// <returns>Список локацій на зазначеному поверсі або NotFound, якщо такі локації відсутні.</returns>
         [HttpGet("floor/{floor}")]
         [Authorize]
         [SwaggerOperation(Summary = "Отримати локації за обраним поверхом.")]
@@ -101,6 +131,11 @@ namespace GasDec.Controllers
             return Ok(locations);
         }
 
+        /// <summary>
+        /// Отримати локації за обраним типом.
+        /// </summary>
+        /// <param name="type">Тип локації для пошуку.</param>
+        /// <returns>Список локацій з відповідним типом або NotFound, якщо такі локації відсутні.</returns>
         [HttpGet("type/{type}")]
         [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати локації за обраним типом.")]
@@ -114,6 +149,28 @@ namespace GasDec.Controllers
             }
 
             return Ok(locations);
+        }
+
+        /// <summary>
+        /// Отримати мінімальну кількість сенсорів для обраної локації.
+        /// </summary>
+        /// <param name="locationId">ID локації для обчислення необхідної кількості сенсорів.</param>
+        /// <param name="minRequiredSensors">Мінімальна кількість сенсорів.</param>
+        /// <returns>Кількість необхідних сенсорів.</returns>
+        [HttpGet("calculate_sensors/{locationId}")]
+        [Authorize(Roles = "LogicAdmin")]
+        [SwaggerOperation(Summary = "Отримати мінімальну кількість сенсорів для обраної локації.")]
+        public async Task<IActionResult> CalculateSensors(int locationId, [FromQuery] int? minRequiredSensors = null)
+        {
+            try
+            {
+                var requiredSensors = await _locationService.CalculateRequiredSensorsAsync(locationId, minRequiredSensors);
+                return Ok(new { RequiredSensors = requiredSensors });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
         }
     }
 }

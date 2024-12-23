@@ -80,6 +80,12 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Отримати всі перевірки за обраною датою.
+        /// </summary>
+        /// <param name="date">Дата, за яку потрібно отримати перевірки у форматі 'yyyy-MM-dd'.</param>
+        /// <returns>Список перевірок для обраної дати.</returns>
+        /// <returns>BadRequest, якщо формат дати некоректний, або NotFound, якщо перевірки не знайдені.</returns>
         [HttpGet("date/{date}")]
         [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі перевірки за обраною датою.")]
@@ -100,6 +106,12 @@ namespace GasDec.Controllers
             return Ok(sensorChecks);
         }
 
+        /// <summary>
+        /// Отримати всі перевірки з обраним результатом.
+        /// </summary>
+        /// <param name="result">Результат перевірки (наприклад, 'Pass' або 'Fail').</param>
+        /// <returns>Список перевірок з відповідним результатом.</returns>
+        /// <returns>NotFound, якщо перевірки з таким результатом не знайдені.</returns>
         [HttpGet("result/{result}")]
         [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі перевірки з обраним результатом.")]
@@ -115,6 +127,11 @@ namespace GasDec.Controllers
             return Ok(sensorChecks);
         }
 
+        /// <summary>
+        /// Отримати всі перевірки для обраного сенсора.
+        /// </summary>
+        /// <param name="sensorId">ID сенсора для пошуку перевірок.</param>
+        /// <returns>Список перевірок для сенсора з відповідним ID або NotFound, якщо перевірки не знайдені.</returns>
         [HttpGet("sensor/{sensorId}")]
         [Authorize(Roles = "Admin, LogicAdmin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі перевірки для обраного сенсора.")]

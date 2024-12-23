@@ -65,6 +65,11 @@ namespace GasDec.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Отримує всі сповіщення за вказаним типом сповіщення.
+        /// </summary>
+        /// <param name="notificationType">Тип сповіщення для фільтрації.</param>
+        /// <returns>Список сповіщень, що відповідають вказаному типу.</returns>
         public async Task<List<Notification>> GetNotificationsByTypeAsync(string notificationType)
         {
             return await _context.Notifications

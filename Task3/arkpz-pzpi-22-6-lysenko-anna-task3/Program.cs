@@ -2,6 +2,11 @@ using GasDec.Models;
 using GasDec.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Net;
+using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,11 +38,27 @@ builder.Services.AddScoped<SensorDataService>();
 builder.Services.AddScoped<EventService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<EmailService>();
+
+builder.Services.AddScoped<SmtpClient>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var smtpSettings = configuration.GetSection("Smtp");
+
+    var smtpClient = new SmtpClient(smtpSettings["Host"])
+    {
+        Port = int.Parse(smtpSettings["Port"]),
+        Credentials = new NetworkCredential(smtpSettings["Email"], smtpSettings["Password"]),
+        EnableSsl = true
+    };
+    return smtpClient;
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
+
     с.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",

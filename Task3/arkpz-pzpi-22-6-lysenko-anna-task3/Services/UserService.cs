@@ -70,6 +70,31 @@ namespace GasDec.Services
                                  .Where(u => u.location_id == locationId)
                                  .ToListAsync();
         }
+
+        public async Task<List<string>> GetAllAdminEmailsAsync()
+        {
+            return await _context.Users
+                                .Where(u => u.role == "Admin")
+                                .Select(u => u.email)
+                                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetAllManagerEmailsAsync()
+        {
+            return await _context.Users
+                                .Where(u => u.role == "Manager")
+                                .Select(u => u.email)
+                                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetEmailsByLocationIdAsync(int locationId)
+        {
+            return await _context.Users
+                                .Where(u => u.location_id == locationId) // Зв'язок користувача з локацією
+                                .Where(u => u.role == "Resident")
+                                .Select(u => u.email)
+                                .ToListAsync();
+        }
     }
 }
 

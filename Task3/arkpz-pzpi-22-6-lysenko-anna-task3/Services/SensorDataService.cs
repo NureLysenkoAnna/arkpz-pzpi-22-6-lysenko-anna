@@ -30,6 +30,9 @@ namespace GasDec.Services
         {
             _context.SensorData.Add(sensorData);
             await _context.SaveChangesAsync();
+
+            await MonitorNewSensorDataAsync(sensorData);
+
             return sensorData;
         }
 
@@ -61,6 +64,107 @@ namespace GasDec.Services
 
             _context.SensorData.Remove(sensorData);
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Моніторинг нових даних сенсора та створення подій у випадку високого рівня небезпеки.
+        /// </summary>
+        /// <param name="sensorData">Дані сенсора, що містять показники газу, температури та тиску.</param>
+        public async Task MonitorNewSensorDataAsync(SensorData sensorData)
+        {
+            double dangerLevel = CalculateDangerLevel(sensorData.gas_level, 
+                sensorData.temperature, sensorData.pressure);
+
+            if (dangerLevel > 10)
+            {
+                var eventSeverity = dangerLevel > 2 ? "High" : "Medium";
+                var eventTime = DateTime.Now;
+
+                var newEvent = new Event
+                {
+                    data_id = sensorData.data_id,
+                    event_time = eventTime,
+                    severity = SeverityLevel.High
+                };
+
+                _context.Events.Add(newEvent);
+                await _context.SaveChangesAsync();
+
+                await SendNotificationToAdminAsync(newEvent, eventSeverity);
+            }
+        }
+
+        /// <summary>
+        /// Обчислення рівня небезпеки на основі показників сенсора.
+        /// </summary>
+        /// <param name="gasLevel">Рівень газу в ppm.</param>
+        /// <param name="temperature">Температура в градусах Цельсія.</param>
+        /// <param name="pressure">Тиск у барах.</param>
+        /// <returns>Рівень небезпеки як числове значення.</returns>
+        private double CalculateDangerLevel(double gasLevel, double temperature, double pressure)
+        {
+            double maxGasLevel = 50000;
+            double maxTemperature = 30;
+            double maxPressure = 10;
+
+            return (gasLevel / maxGasLevel) + (temperature / maxTemperature) + (pressure / maxPressure);
+        }
+
+        /// <summary>
+        /// Відправка сповіщення адміністратору та іншим одержувачам про нову подію.
+        /// </summary>
+        /// <param name="newEvent">Подія, створена на основі даних сенсора.</param>
+        /// <param name="eventSeverity">Рівень серйозності події ("High" або "Medium").</param>
+        public async Task SendNotificationToAdminAsync(Event newEvent, string eventSeverity)
+        {
+            var adminEmails = await _userService.GetAllAdminEmailsAsync();
+
+            var sensorData = await _context.SensorData
+                .Include(sd => sd.Sensor)
+                .ThenInclude(s => s.Location)
+                .FirstOrDefaultAsync(sd => sd.data_id == newEvent.data_id);
+
+            if (sensorData == null)
+            {
+                Console.WriteLine("Для події не знайдено даних сенсора.");
+                return;
+            }
+
+            var locationId = sensorData.Sensor?.location_id ?? 0;
+            var residentEmails = await _userService.GetEmailsByLocationIdAsync(locationId);
+
+            var managerEmails = await _userService.GetAllManagerEmailsAsync();
+
+            var allRecipients = adminEmails
+                .Concat(managerEmails)
+                .Concat(residentEmails)
+                .Distinct()
+                .ToList();
+
+            if (allRecipients.Count == 0)
+            {
+                Console.WriteLine("Одержувачів не знайдено.");
+                return;
+            }
+
+            string locationName = sensorData.Sensor?.Location?.name ?? "невідомо";
+            string locationFloor = sensorData.Sensor?.Location?.floor.ToString() ?? "невідомо";
+
+            string message = $"Серйозність події: {eventSeverity}\n" +
+                             $"Час фіксування: {newEvent.event_time}\n\n" +
+                             $"Інформація, отримана з сенсора:\n" +
+                             $"ID сенсора, що зафіксував подію: {sensorData.sensor_id}\n" +
+                             $"Локація: {locationName}\n" +
+                             $"Поверх: {locationFloor}\n" +
+                             $"Показник вмісту газу: {sensorData.gas_level} ppm\n" +
+                             $"Показник температури: {sensorData.temperature} °C\n" +
+                             $"Показник тиску: {sensorData.pressure} bar\n\n" +
+                             $"Будь ласка, негайно перевірте систему, щоб запобігти будь-яким небезпекам.";
+
+            foreach (var recipientEmail in allRecipients)
+            {
+                await _emailService.SendEmailAsync(recipientEmail, "Увага! Зафіксовано аномальну подію!", message);
+            }
         }
     }
 }

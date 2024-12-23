@@ -15,6 +15,11 @@ public class AuthController : ControllerBase
         _jwtService = jwtService;
     }
 
+    /// <summary>
+    /// Виконує вхід користувача до системи.
+    /// </summary>
+    /// <param name="request">Об'єкт із обліковими даними користувача: електронна пошта та пароль.</param>
+    /// <returns>JWT токен для авторизації або статус помилки.</returns>
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequest request)
     {

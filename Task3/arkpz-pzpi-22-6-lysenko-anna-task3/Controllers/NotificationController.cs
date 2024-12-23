@@ -80,6 +80,11 @@ namespace GasDec.Controllers
             }
         }
 
+        /// <summary>
+        /// Отримати всі сповіщення за вказаним типом.
+        /// </summary>
+        /// <param name="type">Тип сповіщення для фільтрації.</param>
+        /// <returns>Список сповіщень за вказаним типом, або NotFound, якщо сповіщення не знайдені.</returns>
         [HttpGet("type/{type}")]
         [Authorize(Roles = "Admin, Manager")]
         [SwaggerOperation(Summary = "Отримати всі сповіщення за вказаним типом.")]

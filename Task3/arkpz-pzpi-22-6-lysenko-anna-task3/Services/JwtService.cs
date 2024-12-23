@@ -14,6 +14,12 @@ namespace GasDec.Services
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Генерує JWT токен для користувача на основі його ID та ролі.
+        /// </summary>
+        /// <param name="userId">ID користувача, для якого генерується токен.</param>
+        /// <param name="role">Роль користувача, яка буде вказана в токені.</param>
+        /// <returns>JWT токен у вигляді рядка.</returns>
         public string GenerateToken(string userId, string role)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
