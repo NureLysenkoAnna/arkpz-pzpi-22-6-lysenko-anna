@@ -12,6 +12,13 @@ namespace IoTClient.Services
     /// </summary>
     public static class SensorDataAnalyzer
     {
+        private static AnalyzerSettings _settings;
+
+        public static void InitializeSettings(AnalyzerSettings settings)
+        {
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        }
+
         /// <summary>
         /// Аналізує дані сенсора та визначає рівень загрози на основі заданих ваг та нормалізації параметрів.
         /// </summary>
@@ -20,9 +27,9 @@ namespace IoTClient.Services
         public static SeverityLevel AnalyzeSensorData(dynamic sensorData)
         {
             // Визначаємо коефіцієнти ваги для кожного параметра
-            double gasWeight = 0.4;
-            double temperatureWeight = 0.3;
-            double pressureWeight = 0.3;
+            double gasWeight = _settings.GasWeight;
+            double temperatureWeight = _settings.TemperatureWeight;
+            double pressureWeight = _settings.PressureWeight;
 
             // Отримуємо значення з даних сенсора
             double gasLevel = sensorData.gas_level;

@@ -13,10 +13,16 @@ class Program
 {
     static async Task Main(string[] args)
     {
+        // Завантаження налаштувань з конфігураційного файлу.
         var config = new ConfigurationBuilder()
         .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .Build();
+
+        var settings = config.GetSection("AnalyzerSettings").Get<AnalyzerSettings>();
+
+        // Ініціалізація налаштувань
+        SensorDataAnalyzer.InitializeSettings(settings);
 
         // Завантаження MQTT-параметрів з конфігурації
         var mqttSettings = config.GetSection("MqttSettings");
